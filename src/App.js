@@ -23,7 +23,7 @@ const App = () => {
           <input type='text' placeholder='password' />
         </div>
         <div className={styles.search}>
-          <input type='text' placeholder='search keywords' />
+          <input type='text' placeholder='search query' />
           <input type='text' placeholder='location' />
         </div>
         <div className={styles.buttons}>
