@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import styles from './_app.module.sass'
+import FeatherIcon from 'feather-icons-react'
 
-function App() {
+const App = () => {
+
+  const Header = () => {
+    return (
+      <div className={styles.header}>
+        <img src='/logo.png' />
+        <div className={styles.dropdown}>
+          <p>Indeed</p>
+          <FeatherIcon icon='chevron-down' />
+        </div>
+      </div>
+    )
+  }
+
+  const Form = () => {
+    return (
+      <div className={styles.form}>
+        <input type='text' placeholder='email' />
+        <input type='text' placeholder='password' />
+        <input type='text' placeholder='search keywords' />
+        <input type='text' placeholder='location' />
+        <label>Resume</label>
+        <input type='file' />
+        <label>Cover Letter</label>
+        <input type='file' />
+      </div>
+    )
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.app}>
+      <Header />
+      <Form />
+      <button>Start</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

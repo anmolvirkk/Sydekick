@@ -1,0 +1,47 @@
+.app
+    display: flex
+    flex-flow: column
+    justify-content: center
+    button
+        all: unset
+        cursor: pointer
+        width: calc( 100% - 24px )
+        background-color: rgb(126,87,255)
+        padding: 12px
+        display: flex
+        justify-content: center
+        align-items: center
+        background-image: linear-gradient(200deg, var(--secondary), rgba(142, 97, 255, 0) 34%), radial-gradient(circle farthest-corner at 0% -100%, var(--primary) 20%, rgba(205, 219, 248, 0) 51%), linear-gradient(180deg, var(--secondary), var(--primary))
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    background-color: rgb(30,30,30)
+    padding: 12px
+    img
+        width: 34px
+        height: 34px
+    .dropdown
+        display: flex
+        align-items: center
+        justify-content: space-between
+        padding: 6px 12px 6px 16px
+        border: 1px solid #808080
+        border-radius: 7px 7px
+        cursor: pointer
+        p
+            margin: 0
+            line-height: 0
+            margin-right: 12px
+        svg
+            margin-right: -4px
+
+.form
+    padding: 0 12px
+    input
+        all: unset
+        border-bottom: 1px solid rgb(30,30,30)
+        padding-bottom: 12px
+        margin: 12px 0
+        width: 100%
