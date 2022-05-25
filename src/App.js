@@ -57,12 +57,14 @@ const App = () => {
           play
           animationData={data}
           style={{
-            width: 220,
-            height: 220
+            width: 180,
+            height: 180
           }}
         />
-        <h1>Sydekick</h1>
-        <p>Automate Job Applications</p>
+        <div>
+          <h1>Sydekick</h1>
+          <p>Automate Job Applications</p>
+        </div>
       </div>
       <Form />
       <button>Start</button>
