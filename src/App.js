@@ -1,5 +1,7 @@
 import styles from './_app.module.sass'
 import FeatherIcon from 'feather-icons-react'
+import Lottie from 'react-lottie-player'
+import * as data from './robot.json'
 
 const App = () => {
 
@@ -49,6 +51,19 @@ const App = () => {
   return (
     <div className={styles.app}>
       <Header />
+      <div className={styles.hero}>
+        <Lottie
+          loop
+          play
+          animationData={data}
+          style={{
+            width: 220,
+            height: 220
+          }}
+        />
+        <h1>Sydekick</h1>
+        <p>Automate Job Applications</p>
+      </div>
       <Form />
       <button>Start</button>
     </div>
