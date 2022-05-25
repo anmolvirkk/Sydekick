@@ -37,7 +37,7 @@ const App = () => {
           <label>
               <div className={styles.content}>
                   <FeatherIcon icon='upload' />
-                  <p>Upload Coverletter</p>
+                  <p>Upload Cover Letter</p>
               </div>
               <input type="file" />
           </label>
