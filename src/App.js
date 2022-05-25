@@ -18,14 +18,30 @@ const App = () => {
   const Form = () => {
     return (
       <div className={styles.form}>
-        <input type='text' placeholder='email' />
-        <input type='text' placeholder='password' />
-        <input type='text' placeholder='search keywords' />
-        <input type='text' placeholder='location' />
-        <label>Resume</label>
-        <input type='file' />
-        <label>Cover Letter</label>
-        <input type='file' />
+        <div className={styles.auth}>
+          <input type='text' placeholder='email' />
+          <input type='text' placeholder='password' />
+        </div>
+        <div className={styles.search}>
+          <input type='text' placeholder='search keywords' />
+          <input type='text' placeholder='location' />
+        </div>
+        <div className={styles.buttons}>
+          <label>
+              <div className={styles.content}>
+                  <FeatherIcon icon='upload' />
+                  <p>Upload Resume</p>
+              </div>
+              <input type="file" />
+          </label>
+          <label>
+              <div className={styles.content}>
+                  <FeatherIcon icon='upload' />
+                  <p>Upload Coverletter</p>
+              </div>
+              <input type="file" />
+          </label>
+        </div>
       </div>
     )
   }
