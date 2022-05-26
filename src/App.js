@@ -8,7 +8,7 @@ const App = () => {
   const Header = () => {
     return (
       <div className={styles.header}>
-        <img src='/logo.png' />
+        <img src='/logo.png' alt='' />
         <div className={styles.dropdown}>
           <p>Indeed</p>
           <FeatherIcon icon='chevron-down' />

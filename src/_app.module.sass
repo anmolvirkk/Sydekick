@@ -47,8 +47,10 @@
         margin: 12px 0
         width: 100%
     .buttons
-        display: flex
-        justify-content: space-between
+        display: grid
+        grid-template-columns: 1fr 1fr
+        label:first-child
+            margin-right: 12px
 
     .content
         border-radius: 10px 10px
