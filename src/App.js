@@ -61,7 +61,7 @@ const App = () => {
             height: 180
           }}
         />
-        <div>
+        <div className={styles.content}>
           <h1>Sydekick</h1>
           <p>Automate Job Applications</p>
         </div>
