@@ -13,6 +13,7 @@ const App = () => {
     'https://au.indeed.com/',
     'https://ca.indeed.com/'
   ])
+  const formData = useRef({})
 
   const Header = () => {
     const [openMenu, setOpenMenu] = useState(false)
@@ -48,12 +49,12 @@ const App = () => {
     return (
       <div className={styles.form}>
         <div className={styles.auth}>
-          <input type='text' placeholder='email' id='email' />
-          <input type='text' placeholder='password' id='password' />
+          <input value={formData.current.email} type='text' placeholder='email' onChange={(e)=>formData.current.email = e.target.value} />
+          <input value={formData.current.password} type='text' placeholder='password' onChange={(e)=>formData.current.password = e.target.value} />
         </div>
         <div className={styles.search}>
-          <input type='text' placeholder='search query' id='what' />
-          <input type='text' placeholder='location' id='where' />
+          <input value={formData.current.what} type='text' placeholder='search query' onChange={(e)=>formData.current.what = e.target.value} />
+          <input value={formData.current.where} type='text' placeholder='location' onChange={(e)=>formData.current.where = e.target.value} />
         </div>
         <div className={styles.buttons}>
           <div className={styles.btnWrapper}>
@@ -87,10 +88,10 @@ const App = () => {
       },
       body: JSON.stringify({
         site: site,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        what: document.getElementById('what').value,
-        where: document.getElementById('where').value
+        email: formData.current.email,
+        password: formData.current.password,
+        what: formData.current.what,
+        where: formData.current.where
       })
     }).then((res)=>res.json()).then(data=>{
       console.log(data)
