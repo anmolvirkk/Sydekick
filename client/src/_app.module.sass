@@ -35,8 +35,10 @@
             cursor: pointer
             p
                 margin: 0
-                line-height: 0
                 margin-right: 12px
+                max-width: 250px
+                overflow: hidden
+                text-overflow: ellipsis
             svg
                 margin-right: -4px
         .options
@@ -51,7 +53,6 @@
             max-height: 450px
             overflow-y: auto
             right: 0
-            overflow-x: auto
             ul
                 list-style: none
                 padding: 0 6px
@@ -73,6 +74,9 @@
                         opacity: 0.35
                     p
                         margin: 0
+                        margin-right: 6px
+                        overflow: hidden
+                        text-overflow: ellipsis
             button
                 border-radius: 0 0 7px 7px
                 padding: 12px
