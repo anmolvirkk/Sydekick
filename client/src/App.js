@@ -2,9 +2,17 @@ import styles from './_app.module.sass'
 import FeatherIcon from 'feather-icons-react'
 import Lottie from 'react-lottie-player'
 import * as data from './robot.json'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 const App = () => {
+
+  const [site, setSite] = useState('https://www.indeed.com/')
+  const sites = useRef([
+    'https://www.indeed.com/',
+    'https://uk.indeed.com/',
+    'https://au.indeed.com/',
+    'https://ca.indeed.com/'
+  ])
 
   const Header = () => {
     const [openMenu, setOpenMenu] = useState(false)
@@ -13,16 +21,19 @@ const App = () => {
         <img src='/logo.png' alt='' />
         <div className={styles.dropdown}>
           <div className={styles.current} onMouseDown={()=>setOpenMenu(!openMenu)}>
-            <p>https://www.indeed.com/</p>
+            <p>{site}</p>
             {openMenu?<FeatherIcon icon='chevron-up' />:<FeatherIcon icon='chevron-down' />}
           </div>
           {openMenu?
             <div className={styles.options}>
               <ul>
-                <li>https://www.indeed.com/</li>
-                <li>https://uk.indeed.com/</li>
-                <li>https://au.indeed.com/</li>
-                <li>https://ca.indeed.com/</li>
+                {sites.current.map((item, key)=>{
+                  if(item !== site){
+                    return <li key={key} onMouseDown={()=>setSite(item)}>{item}</li>
+                  }else{
+                    return null
+                  }
+                })}
               </ul>
               <button>Add URL</button>
             </div>
