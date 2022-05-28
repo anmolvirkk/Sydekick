@@ -93,8 +93,6 @@ const App = () => {
         what: formData.current.what,
         where: formData.current.where
       })
-    }).then((res)=>{res.json()}).then(data=>{
-      console.log(data)
     })
   }
 

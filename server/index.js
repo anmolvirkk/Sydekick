@@ -12,43 +12,55 @@ const main = async (req) => {
   const browser = await playwright[browserType].launch({ headless: false })
   const context = await browser.newContext()
   const page = await context.newPage()
-  await page.goto(req.body.site)
-  await page.waitForLoadState('load')
-    
-  await page.waitForSelector('#text-input-what')
-  const whatInput = await page.$('#text-input-what')
-  await whatInput.type(req.body.what)
-
-  await page.waitForSelector('#text-input-where')
-  const whereInput = await page.$('#text-input-where')
-  await whereInput.type(req.body.where)
   
-  await page.keyboard.press('Enter')
+  try {
+    await page.goto(req.body.site)
+    await page.waitForLoadState('load')
+      
+    await page.waitForSelector('#text-input-what')
+    const whatInput = await page.$('#text-input-what')
+    await whatInput.type(req.body.what)
 
-  await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
-  const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
-  const promises = []
+    await page.waitForSelector('#text-input-where')
+    const whereInput = await page.$('#text-input-where')
+    await whereInput.type(req.body.where)
+    
+    await page.keyboard.press('Enter')
 
-  for(let i = 0; i<links; i++){
-    console.log(i)
-    const clickLink = async () => {
-      await page.waitForSelector(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
-      await page.click(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
-    }
-    promises.push(
-      new Promise(res=>{
-        clickLink().then(()=>{
-          setTimeout(()=>{
-            res(null)
-          }, 500)
+    await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
+    
+    const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
+    const promises = []
+
+    for(let i = 0; i<links; i++){
+      const clickLink = async () => {
+        await page.waitForSelector(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
+        await page.click(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
+      }
+      const clickApply = async () => {
+        const applyBtn = await page.waitForSelector('#indeedApplyButton')
+        console.log(applyBtn)
+        if(applyBtn){
+          await page.click(applyBtn, {modifiers: ['Control']})
+        }
+      }
+      promises.push(
+        new Promise(res=>{
+          clickLink().then(()=>{
+            setTimeout(()=>{
+              clickApply().then(()=>{
+                res(null)
+              })
+            }, 10000)
+          })
         })
-      })
-    )
-  }
+      )
+    }
 
-  Promise.all(promises).then(()=>{
-    console.log('done')
-  })
+    Promise.all(promises)
+  } catch (error) {
+    console.log('error')
+  }
 
   // await browser.close()
 }
