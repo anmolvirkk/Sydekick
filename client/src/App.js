@@ -29,7 +29,7 @@ const App = () => {
               <ul>
                 {sites.current.map((item, key)=>{
                   if(item !== site){
-                    return <li key={key} onMouseDown={()=>setSite(item)}>{item}</li>
+                    return <li key={key} onMouseDown={()=>setSite(item)}><p>{item}</p><FeatherIcon icon='trash-2' /></li>
                   }else{
                     return null
                   }
@@ -86,6 +86,7 @@ const App = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        site: site,
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
         what: document.getElementById('what').value,

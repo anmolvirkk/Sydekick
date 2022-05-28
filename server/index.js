@@ -8,13 +8,11 @@ app.use(express.json())
 const playwright = require('playwright')
 const browserType = 'chromium'
 
-const site = 'https://au.indeed.com/'
-
 const main = async (req) => {
   const browser = await playwright[browserType].launch({ headless: false })
   const context = await browser.newContext()
   const page = await context.newPage()
-  await page.goto(site)
+  await page.goto(req.body.site)
   await page.waitForLoadState('load')
     
   await page.waitForSelector('#text-input-what')
