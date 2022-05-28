@@ -2,16 +2,32 @@ import styles from './_app.module.sass'
 import FeatherIcon from 'feather-icons-react'
 import Lottie from 'react-lottie-player'
 import * as data from './robot.json'
+import { useState } from 'react'
 
 const App = () => {
 
   const Header = () => {
+    const [openMenu, setOpenMenu] = useState(false)
     return (
       <div className={styles.header}>
         <img src='/logo.png' alt='' />
         <div className={styles.dropdown}>
-          <p>Indeed</p>
-          <FeatherIcon icon='chevron-down' />
+          <div className={styles.current} onMouseDown={()=>setOpenMenu(!openMenu)}>
+            <p>https://www.indeed.com/</p>
+            {openMenu?<FeatherIcon icon='chevron-up' />:<FeatherIcon icon='chevron-down' />}
+          </div>
+          {openMenu?
+            <div className={styles.options}>
+              <ul>
+                <li>https://www.indeed.com/</li>
+                <li>https://uk.indeed.com/</li>
+                <li>https://au.indeed.com/</li>
+                <li>https://ca.indeed.com/</li>
+              </ul>
+              <button>Add URL</button>
+            </div>
+            :null
+          }
         </div>
       </div>
     )

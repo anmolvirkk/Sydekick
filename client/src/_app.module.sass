@@ -24,20 +24,40 @@
         width: 34px
         height: 34px
     .dropdown
-        display: flex
-        align-items: center
-        justify-content: space-between
-        padding: 6px 12px 6px 16px
-        border: 1px solid #808080
-        border-radius: 7px 7px
-        cursor: pointer
-        p
-            margin: 0
-            line-height: 0
-            margin-right: 12px
-        svg
-            margin-right: -4px
-
+        position: relative
+        .current
+            display: flex
+            align-items: center
+            justify-content: space-between
+            padding: 6px 12px 6px 16px
+            border: 1px solid #808080
+            border-radius: 7px 7px
+            cursor: pointer
+            p
+                margin: 0
+                line-height: 0
+                margin-right: 12px
+            svg
+                margin-right: -4px
+        .options
+            position: absolute
+            background-color: rgba(30,30,30,1)
+            box-shadow: 0 3px 10px rgba(0,0,0,0.35)
+            border-radius: 7px 7px
+            z-index: 9
+            width: 100%
+            top: 60px
+            ul
+                list-style: none
+                padding: 0 12px
+                li
+                    margin: 12px 0
+                    cursor: pointer
+                    font-size: 15px
+            button
+                border-radius: 0 0 7px 7px
+                padding: 12px
+                font-size: 14px
 .form
     padding: 0 12px
     input
