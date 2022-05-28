@@ -56,20 +56,24 @@ const App = () => {
           <input type='text' placeholder='location' id='where' />
         </div>
         <div className={styles.buttons}>
-          <label>
-              <div className={styles.content}>
-                  <FeatherIcon icon='upload' />
-                  <p>Upload Resume</p>
-              </div>
-              <input type="file" />
-          </label>
-          <label>
-              <div className={styles.content}>
-                  <FeatherIcon icon='upload' />
-                  <p>Upload Cover Letter</p>
-              </div>
-              <input type="file" />
-          </label>
+          <div className={styles.btnWrapper}>
+            <label>
+                <div className={styles.content}>
+                    <FeatherIcon icon='upload' />
+                    <p>Upload Resume</p>
+                </div>
+                <input type="file" />
+            </label>
+          </div>
+          <div className={styles.btnWrapper}>
+            <label>
+                <div className={styles.content}>
+                    <FeatherIcon icon='upload' />
+                    <p>Upload Cover Letter</p>
+                </div>
+                <input type="file" />
+            </label>
+          </div>
         </div>
       </div>
     )
