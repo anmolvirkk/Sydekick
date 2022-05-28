@@ -24,12 +24,38 @@ const main = async (req) => {
   await whereInput.type(req.body.where)
   
   await page.keyboard.press('Enter')
+
+  await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
+  const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
+  const promises = []
+
+  for(let i = 0; i<links; i++){
+    console.log(i)
+    const clickLink = async () => {
+      await page.waitForSelector(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
+      await page.click(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
+    }
+    promises.push(
+      new Promise(res=>{
+        clickLink().then(()=>{
+          setTimeout(()=>{
+            res(null)
+          }, 500)
+        })
+      })
+    )
+  }
+
+  Promise.all(promises).then(()=>{
+    console.log('done')
+  })
+
   // await browser.close()
 }
 
 app.post('/', (req, res) => {
   main(req).then(()=>{
-    res.send('test')
+    res.send(null)
   })
 })
 
