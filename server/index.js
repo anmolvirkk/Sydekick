@@ -65,7 +65,6 @@ const main = async (req) => {
             applyJob(1)
           }
         } catch (error) {
-          console.log(error)
           await browser.close()
         }
       }
