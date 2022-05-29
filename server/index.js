@@ -9,11 +9,13 @@ const playwright = require('playwright')
 const browserType = 'chromium'
 
 const main = async (req) => {
+
   const browser = await playwright[browserType].launch({ headless: false })
   const context = await browser.newContext()
   const page = await context.newPage()
   
   try {
+
     await page.goto(req.body.site)
     await page.waitForLoadState('load')
       
@@ -30,39 +32,59 @@ const main = async (req) => {
     await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
     
     const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
-    const promises = []
 
-    for(let i = 0; i<links; i++){
+    const pages = await page.locator('#resultsCol > nav > div > ul > li').count()
+    let currentPage = 0
+
+    const applyJob = (i) => {
       const clickLink = async () => {
-        await page.waitForSelector(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
-        await page.click(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
-      }
-      const clickApply = async () => {
-        const applyBtn = await page.waitForSelector('#indeedApplyButton')
-        console.log(applyBtn)
-        if(applyBtn){
-          await page.click(applyBtn, {modifiers: ['Control']})
+        try {
+          await page.waitForSelector(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`, {timeout: 1000})
+          await page.click(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`, {timeout: 1000})
+          await page.waitForNavigation({timeout: 1000})
+        } catch (error) {
+          console.log('no link')
         }
       }
-      promises.push(
-        new Promise(res=>{
-          clickLink().then(()=>{
-            setTimeout(()=>{
-              clickApply().then(()=>{
-                res(null)
-              })
-            }, 10000)
-          })
+      const clickApply = async () => {
+        try {
+          await page.waitForSelector('#indeedApplyButton', {timeout: 1000})
+          await page.click('#indeedApplyButton', {modifiers: ['Control'], timeout: 1000})
+          await page.waitForNavigation({timeout: 1000})
+        } catch {
+          console.log('no apply')
+        }
+      }
+      const navigatePage = async () => {
+        try {
+          currentPage = currentPage + 2
+          if(currentPage <= pages){
+            await page.waitForSelector(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
+            await page.click(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
+            await page.waitForNavigation()
+            applyJob(1)
+          }
+        } catch (error) {
+          console.log(error)
+          await browser.close()
+        }
+      }
+      clickLink().then(()=>{
+        clickApply().then(()=>{
+          if(i <= links){
+            applyJob(i + 1)
+          }else{
+            navigatePage()
+          }
         })
-      )
+      })
     }
+    applyJob(1)
 
-    Promise.all(promises)
-  } catch (error) {
-    console.log('error')
+  } catch {
+    await browser.close()
   }
 
-  // await browser.close()
 }
 
 app.post('/', (req, res) => {
@@ -72,5 +94,5 @@ app.post('/', (req, res) => {
 })
 
 app.listen(5000, () => {
-  console.log(`Running on port 5000.`)
+  console.log('Running on port 5000.')
 })
