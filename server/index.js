@@ -33,7 +33,6 @@ const main = async (req) => {
     
     const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
 
-    const pages = await page.locator('#resultsCol > nav > div > ul > li').count()
     let currentPage = 0
 
     const applyJob = (i) => {
@@ -58,12 +57,10 @@ const main = async (req) => {
       const navigatePage = async () => {
         try {
           currentPage = currentPage + 2
-          if(currentPage <= pages){
-            await page.waitForSelector(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
-            await page.click(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
-            await page.waitForNavigation()
-            applyJob(1)
-          }
+          await page.waitForSelector(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
+          await page.click(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
+          await page.waitForNavigation()
+          applyJob(1)
         } catch (error) {
           await browser.close()
         }
