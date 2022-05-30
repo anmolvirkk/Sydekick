@@ -45,39 +45,58 @@ const App = () => {
     )
   }
 
+  const [loading, setLoading] = useState(false)
+
   const Form = () => {
-    return (
-      <div className={styles.form}>
-        <div className={styles.auth}>
-          <input value={formData.current.email} type='text' placeholder='email' onChange={(e)=>formData.current.email = e.target.value} />
-          <input value={formData.current.password} type='text' placeholder='password' onChange={(e)=>formData.current.password = e.target.value} />
-        </div>
-        <div className={styles.search}>
-          <input value={formData.current.what} type='text' placeholder='search query' onChange={(e)=>formData.current.what = e.target.value} />
-          <input value={formData.current.where} type='text' placeholder='location' onChange={(e)=>formData.current.where = e.target.value} />
-        </div>
-        <div className={styles.buttons}>
-          <div className={styles.btnWrapper}>
-            <label>
-                <div className={styles.content}>
-                    <FeatherIcon icon='upload' />
-                    <p>Upload Resume</p>
-                </div>
-                <input type="file" />
-            </label>
+    if(!loading){
+      return (
+        <div className={styles.form}>
+          <div className={styles.search}>
+            <input value={formData.current.what} type='text' placeholder='search query' onChange={(e)=>formData.current.what = e.target.value} />
+            <input value={formData.current.where} type='text' placeholder='location' onChange={(e)=>formData.current.where = e.target.value} />
           </div>
-          <div className={styles.btnWrapper}>
-            <label>
-                <div className={styles.content}>
-                    <FeatherIcon icon='upload' />
-                    <p>Upload Cover Letter</p>
-                </div>
-                <input type="file" />
-            </label>
+          <div className={styles.buttons}>
+            <div className={styles.btnWrapper}>
+              <label>
+                  <div className={styles.content}>
+                      <FeatherIcon icon='upload' />
+                      <p>Upload Resume</p>
+                  </div>
+                  <input type="file" />
+              </label>
+            </div>
+            <div className={styles.btnWrapper}>
+              <label>
+                  <div className={styles.content}>
+                      <FeatherIcon icon='upload' />
+                      <p>Upload Cover Letter</p>
+                  </div>
+                  <input type="file" />
+              </label>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }else if(loading === 'login'){
+      return (
+        <div className={styles.form}>
+          <div className={styles.wrapper}>
+            <div id='loginCountDown' className={styles.countDown}>Login and go to home screen within 120s</div>
+            <div className={styles.loginloader}>
+              <div className={styles.progress} id='progress' />
+            </div>
+          </div>
+        </div>
+      )
+    }else{
+      return (
+        <div className={styles.form}>
+          <div className={styles.wrapper}>
+            <div className={styles.loader} />
+          </div>
+        </div>
+      )
+    }
   }
 
   const start = () => {
@@ -93,7 +112,21 @@ const App = () => {
         what: formData.current.what,
         where: formData.current.where
       })
+    }).then(()=>{
+      setLoading(false)
     })
+    let countDown = 120
+    const interval = setInterval(()=>{
+      if(countDown > 0){
+        countDown--
+        document.getElementById('loginCountDown').innerText = 'Login and go to home screen within '+countDown+'s'
+        document.getElementById('progress').style.width = countDown/120*100+'%'
+      }else{
+        clearInterval(interval)
+        setLoading(true)
+      }
+    }, 1000)
+    setLoading('login')
   }
 
   return (
