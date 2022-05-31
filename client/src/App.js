@@ -6,11 +6,11 @@ import { useRef, useState } from 'react'
 
 const App = () => {
 
-  const [site, setSite] = useState('https://www.indeed.com/')
+  const [site, setSite] = useState('Indeed')
   const sites = useRef([
-    'https://www.indeed.com/',
-    'https://www.glassdoor.com/',
-    'https://www.linkedin.com/jobs/'
+    'Indeed',
+    'Glassdoor',
+    'LinkedIn'
   ])
   const formData = useRef({})
 
