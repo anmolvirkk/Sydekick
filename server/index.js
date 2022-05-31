@@ -19,7 +19,10 @@ const main = async (req) => {
     await page.goto('https://secure.indeed.com/auth')
     await page.waitForLoadState('load')
 
-    await page.waitForTimeout(120000)
+    await page.waitForSelector('#app-root > div > div.settings-NavMenuContainer', {state: 'visible', timeout: 2147483647})
+    await page.waitForSelector('#indeed-globalnav-logo')
+    await page.click('#indeed-globalnav-logo')
+    await page.waitForLoadState('load')
 
     await page.waitForSelector('#text-input-what')
     const whatInput = await page.$('#text-input-what')
@@ -30,6 +33,15 @@ const main = async (req) => {
     await whereInput.type(req.body.where)
     
     await page.keyboard.press('Enter')
+    await page.waitForLoadState('load')
+
+    try {
+      await page.waitForSelector('#resultsCol > div.no_results > div > p > a')
+      await page.click('#resultsCol > div.no_results > div > p > a')
+      await page.waitForLoadState('load')
+    } catch (error) {
+      console.log(error)
+    }
 
     await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
     
@@ -44,7 +56,6 @@ const main = async (req) => {
       try {
         let pages = context.pages()
         for(const newPage of pages){
-          console.log(newPage)
           newPage.waitForLoadState('load')
           newPage.waitForSelector('#applyButtonLinkContainer > div > div.icl-u-xs-hide.icl-u-lg-block.icl-u-lg-textCenter > a')
           newPage.click('#applyButtonLinkContainer > div > div.icl-u-xs-hide.icl-u-lg-block.icl-u-lg-textCenter > a')

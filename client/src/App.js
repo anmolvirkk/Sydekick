@@ -9,9 +9,8 @@ const App = () => {
   const [site, setSite] = useState('https://www.indeed.com/')
   const sites = useRef([
     'https://www.indeed.com/',
-    'https://uk.indeed.com/',
-    'https://au.indeed.com/',
-    'https://ca.indeed.com/'
+    'https://www.glassdoor.com/',
+    'https://www.linkedin.com/jobs/'
   ])
   const formData = useRef({})
 
@@ -30,13 +29,12 @@ const App = () => {
               <ul>
                 {sites.current.map((item, key)=>{
                   if(item !== site){
-                    return <li key={key} onMouseDown={()=>setSite(item)}><p>{item}</p><FeatherIcon icon='trash-2' /></li>
+                    return <li key={key} onMouseDown={()=>setSite(item)}><p>{item}</p></li>
                   }else{
                     return null
                   }
                 })}
               </ul>
-              <button>Add URL</button>
             </div>
             :null
           }
@@ -77,17 +75,6 @@ const App = () => {
           </div>
         </div>
       )
-    }else if(loading === 'login'){
-      return (
-        <div className={styles.form}>
-          <div className={styles.wrapper}>
-            <div id='loginCountDown' className={styles.countDown}>Login and go to home screen within 120s</div>
-            <div className={styles.loginloader}>
-              <div className={styles.progress} id='progress' />
-            </div>
-          </div>
-        </div>
-      )
     }else{
       return (
         <div className={styles.form}>
@@ -100,6 +87,7 @@ const App = () => {
   }
 
   const start = () => {
+    setLoading(true)
     fetch('http://localhost:5000/', {
       method: 'POST',
       headers: {
@@ -115,18 +103,6 @@ const App = () => {
     }).then(()=>{
       setLoading(false)
     })
-    let countDown = 120
-    const interval = setInterval(()=>{
-      if(countDown > 0){
-        countDown--
-        document.getElementById('loginCountDown').innerText = 'Login and go to home screen within '+countDown+'s'
-        document.getElementById('progress').style.width = countDown/120*100+'%'
-      }else{
-        clearInterval(interval)
-        setLoading(true)
-      }
-    }, 1000)
-    setLoading('login')
   }
 
   return (
