@@ -40,60 +40,96 @@ const main = async (req) => {
       await page.click('#resultsCol > div.no_results > div > p > a')
       await page.waitForLoadState('load')
     } catch (error) {
-      console.log(error)
+      console.log('no result error')
     }
-
-    await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
-    
-    const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
-
-    const promises = []
 
     let currentPage = 0
 
-    const nextPage = async () => {
-      currentPage = currentPage + 2
-      try {
-        let pages = context.pages()
-        for(const newPage of pages){
-          newPage.waitForLoadState('load')
-          newPage.waitForSelector('#applyButtonLinkContainer > div > div.icl-u-xs-hide.icl-u-lg-block.icl-u-lg-textCenter > a')
-          newPage.click('#applyButtonLinkContainer > div > div.icl-u-xs-hide.icl-u-lg-block.icl-u-lg-textCenter > a')
+    const openAllLinks = async () => {
+      await page.waitForSelector('#mosaic-provider-jobcards > ul > li')
+      const links = await page.locator('#mosaic-provider-jobcards > ul > li').count()
+      const promises = []
+      const closeModal = async () => {
+        try {
+          await page.waitForSelector('#popover-x > button')
+          await page.click('#popover-x > button')
+        } catch (error) {
+          console.log('modal error')
         }
-        await page.waitForSelector(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
-        await page.click(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
-      } catch (error) {
-        console.log(error)
-        // await browser.close()
       }
-    }
-
-    const openJobs = async () => {
       for(let i = 1; i <= links; i++){
-        const openJobs = async (res) => {
+        const openLink = async () => {
           try {
             await page.waitForSelector(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`)
             await page.click(`#mosaic-provider-jobcards > ul > li:nth-child(${i})`, {modifiers: ['Control']})
           } catch (error) {
-            console.log(error)
-            // await browser.close()
+            console.log('open jobs error')
           }
         }
         promises.push(
           new Promise(res=>{
-            openJobs(res).then(()=>{
-              res(null)
+            closeModal().then(()=>{
+              openLink().then(()=>{
+                res(null)
+              })
             })
           })
         )
       }
-      await Promise.all(promises)
-      nextPage().then(()=>{
-        openJobs()
+      Promise.all(promises).then(()=>{
+        currentPage = currentPage + 2
+        let pages = context.pages()
+        const promises = []
+        const apply = async (newPage) => {
+          await newPage.waitForLoadState('load')
+          const applyOut = await newPage.locator(`a:has-text('Apply on company site')`).count()
+          if(applyOut > 0){
+            try {
+              await newPage.click(`a:has-text('Apply on company site')`)
+              await newPage.close()
+            } catch (error) {
+              console.log('company site click error')
+              console.log(applyOut)
+              console.log(await newPage.locator(`a:has-text('Apply on company site')`))
+            }
+          }else{
+            try {
+              await newPage.waitForSelector('#indeedApplyButton')
+              await newPage.click('#indeedApplyButton')
+            } catch (error) {
+              console.log('indeed apply error')
+            }
+          }
+        }
+        for(const newPage of pages){
+          promises.push(
+            new Promise(res=>{
+              apply(newPage).then(()=>{
+                res(null)
+              })
+            })
+          )
+        }
+        const nextPage = async () => {
+          console.log('go to next page')
+          console.log(currentPage)
+          try {
+            await page.waitForSelector(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
+            await page.click(`#resultsCol > nav > div > ul > li:nth-child(${currentPage}) > a`)
+          } catch (error) {
+            console.log('nextPage error')
+          }
+        }
+        Promise.all(promises).then(() => {
+          openAllLinks()
+        })
+        nextPage().then(()=>{
+          openAllLinks()
+        })
       })
     }
 
-    openJobs()
+    openAllLinks()
 
   } catch {
     await browser.close()
@@ -103,7 +139,7 @@ const main = async (req) => {
 
 app.post('/', (req, res) => {
   main(req).then(()=>{
-    res.send(null)
+    // res.send(null)
   })
 })
 
